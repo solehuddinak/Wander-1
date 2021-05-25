@@ -11,9 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import dagger.hilt.android.AndroidEntryPoint
+import dev.dizzy1021.core.utils.SharedPreferenceUtil
 import dev.dizzy1021.wander.R
 import dev.dizzy1021.wander.databinding.FragmentOnboardBinding
 import dev.dizzy1021.wander.ui.onboard.adapter.OnboardSectionsAdapter
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -21,6 +23,9 @@ class OnboardFragment : Fragment() {
 
     private var _binding: FragmentOnboardBinding? = null
     private val binding get() = _binding as FragmentOnboardBinding
+
+    @Inject
+    lateinit var pref: SharedPreferenceUtil
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +62,10 @@ class OnboardFragment : Fragment() {
             if (binding.onboardViewPager.currentItem + 1 < pagerAdapter.itemCount) {
                 binding.onboardViewPager.currentItem = binding.onboardViewPager.currentItem + 1
             } else {
+
+                pref.setUser()
+                pref.setStatusOnboard(true)
+
                 findNavController().navigate(R.id.action_onboardFragment_to_homeFragment)
             }
         }
