@@ -10,5 +10,6 @@
     <color name="black_1">#121212</color>
     <color name="gray">#C4C4C4</color>
     <color name="blue">#2F80ED</color>
+    <color name="purple">#6C63FF</color>
     <color name="yellow">#F7EA00</color>
 </resources>

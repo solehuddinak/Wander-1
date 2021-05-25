@@ -4,4 +4,14 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="wander">Wander</string>
     <string name="no_internet_connection">No Internet Connection</string>
+    <string name="features">Features</string>
+    <string name="skip">Skip</string>
+    <string name="onboard_title_one">Serve The Best Place</string>
+    <string name="onboard_subtitle_one">Explore your destination and we live up to your expectations</string>
+    <string name="onboard_title_two">Easy To Find</string>
+    <string name="onboard_subtitle_two">We will find your place based your image reference</string>
+    <string name="onboard_title_three">Flexible Search</string>
+    <string name="onboard_subtitle_three">Use your keywords and we will give you the best place</string>
+    <string name="explore_now">Explore Now</string>
+    <string name="next">Next</string>
 </resources>

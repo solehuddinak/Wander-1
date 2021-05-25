@@ -10,28 +10,28 @@ interface Services {
 
     @GET("home")
     suspend fun callHome(
-        @Query("key") key: String = BuildConfig.API_KEY,
+        @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("page") page: Int,
         @Query("user") user: String,
     ): Response<ResponseWrapper<ResponseHome>>
 
     @GET("wishlist")
     suspend fun callWishlist(
-        @Query("key") key: String = BuildConfig.API_KEY,
+        @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("page") page: Int,
         @Query("user") user: String,
     ): Response<ResponseWrapper<ResponseWishlist>>
 
     @GET("review")
     suspend fun callReview(
-        @Query("key") key: String = BuildConfig.API_KEY,
+        @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("page") page: Int,
         @Query("user") user: String,
     ): Response<ResponseWrapper<ResponseReviews>>
 
     @GET("place/search")
     suspend fun searchPlaces(
-        @Query("key") key: String = BuildConfig.API_KEY,
+        @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("q") q: String?,
         @Query("page") page: Int,
         @Query("user") user: String,
@@ -42,13 +42,13 @@ interface Services {
     suspend fun callPlaceById(
         @Path("id") id: Int,
         @Query("user") user: String,
-        @Query("key") key: String = BuildConfig.API_KEY
+        @Query("key") key: String = BuildConfig.API_KEY_SERVER
     ): Response<ResponseWrapper<ResponsePlace>>
 
     @GET("place/{id}/review")
     suspend fun callReviewPlace(
         @Path("id") id: Int,
-        @Query("key") key: String = BuildConfig.API_KEY,
+        @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("page") page: Int,
     ): Response<ResponseWrapper<ResponseReviewsPlace>>
 
@@ -56,7 +56,7 @@ interface Services {
     suspend fun createReview(
         @Path("id") id: Int,
         @Body formRequest : RequestAddReview,
-        @Query("key") key: String = BuildConfig.API_KEY
+        @Query("key") key: String = BuildConfig.API_KEY_SERVER
     ): Response<ResponseWrapper<Any?>>
 
 }

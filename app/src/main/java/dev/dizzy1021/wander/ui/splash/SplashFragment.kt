@@ -2,11 +2,15 @@
 package dev.dizzy1021.wander.ui.splash
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dev.dizzy1021.core.utils.SPLASH_SCREEN_DELAY
 import dev.dizzy1021.wander.R
 import dev.dizzy1021.wander.databinding.FragmentSplashBinding
 
@@ -34,6 +38,22 @@ class SplashFragment : Fragment() {
     ): View {
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        loadSplashScreen()
+    }
+
+    private fun loadSplashScreen() {
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            context?.let {
+                findNavController().navigate(R.id.action_splashFragment_to_onboardFragment)
+            }
+
+        }, SPLASH_SCREEN_DELAY)
     }
 
     override fun onDestroyView() {
