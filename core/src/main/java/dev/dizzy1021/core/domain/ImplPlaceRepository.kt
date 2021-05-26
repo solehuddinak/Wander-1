@@ -8,12 +8,10 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ImplPlaceRepository @Inject constructor(
-    private val placeRepository: IPlaceRepository
+    private val repository: IPlaceRepository
 ) : PlaceUseCase {
 
-    override fun fetchHome(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> {
-        TODO("Not yet implemented")
-    }
+    override fun fetchHome(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> = repository.fetchHome(page, user)
 
     override fun getWishlist(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> {
         TODO("Not yet implemented")

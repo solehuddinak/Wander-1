@@ -18,8 +18,8 @@ data class ResponseWrapper<out Q>(
     @field:SerializedName("data")
     val data: Q?,
 
-    @field:SerializedName("data")
-    val links: ResponseLinks?,
+    @field:SerializedName("links")
+    val links: ResponseLinks,
 )
 
 @Parcelize

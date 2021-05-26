@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import dev.dizzy1021.core.R
 import dev.dizzy1021.core.adapter.event.OnItemClickCallback
 import dev.dizzy1021.core.databinding.ItemListPlaceBinding
@@ -22,12 +23,19 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.ListViewHolder>() {
     inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val binding = ItemListPlaceBinding.bind(itemView)
 
-        fun bind(items: Place) {
+        fun bind(item: Place) {
             with(binding) {
+                this.placeName.text = item.name
+                this.placeRating.text = item.rating.toString()
 
+                Glide.with(itemView.context)
+                    .load(item.poster)
+                    .error(R.drawable.ic_no_image)
+                    .placeholder(R.drawable.ic_no_image)
+                    .into(this.posterPlace)
             }
 
-            itemView.setOnClickListener { onItemClickCallback?.onItemClicked(items) }
+            itemView.setOnClickListener { onItemClickCallback?.onItemClicked(item) }
         }
     }
 

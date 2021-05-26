@@ -1,19 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    tools:context=".ui.home.HomeFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmer_container"
+        app:shimmer_auto_start="true"
+        app:shimmer_repeat_mode="restart"
+        app:shimmer_repeat_count="5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:indeterminateTint="@color/blue"
-        android:visibility="gone" />
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <GridLayout
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:useDefaultMargins="true"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+            <include layout="@layout/item_shimmer_place_layout" />
+
+        </GridLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
     <TextView
         android:id="@+id/network_error"
@@ -30,7 +55,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_home"
         android:layout_width="match_parent"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_height="match_parent" />
 
 </FrameLayout>

@@ -14,8 +14,8 @@ import javax.inject.Singleton
 @Singleton
 class RemoteDataSource @Inject constructor(private val services: Services) {
 
-    suspend fun fetchHome(page: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseHome>>> {
-        return flow {
+    suspend fun fetchHome(page: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<List<ResponseHome>>>> =
+        flow {
             services.callHome(
                 page = page,
                 user = user
@@ -27,10 +27,9 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                 }
             }
         }.flowOn(Dispatchers.IO)
-    }
 
-    suspend fun fetchWishlist(page: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseWishlist>>> {
-        return flow {
+    suspend fun fetchWishlist(page: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseWishlist>>> =
+         flow {
             services.callWishlist(
                 page = page,
                 user = user
@@ -42,10 +41,9 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                 }
             }
         }.flowOn(Dispatchers.IO)
-    }
 
-    suspend fun fetchReview(page: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseReviews>>> {
-        return flow {
+    suspend fun fetchReview(page: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseReviews>>> =
+        flow {
             services.callReview(
                 page = page,
                 user = user
@@ -57,10 +55,9 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                 }
             }
         }.flowOn(Dispatchers.IO)
-    }
 
-    suspend fun findPlaces(page: Int, user: String, q: String?, image: Any?): Flow<ResourceWrapper<ResponseWrapper<ResponseSearch>>> {
-        return flow {
+    suspend fun findPlaces(page: Int, user: String, q: String?, image: Any?): Flow<ResourceWrapper<ResponseWrapper<ResponseSearch>>> =
+         flow {
             services.searchPlaces(
                 page = page,
                 user = user,
@@ -74,10 +71,9 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                 }
             }
         }.flowOn(Dispatchers.IO)
-    }
 
-    suspend fun findPlaceByID(id: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponsePlace>>> {
-        return flow {
+    suspend fun findPlaceByID(id: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponsePlace>>> =
+         flow {
             services.callPlaceById(
                 id = id,
                 user = user,
@@ -89,10 +85,9 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                 }
             }
         }.flowOn(Dispatchers.IO)
-    }
 
-    suspend fun fetchReviewPlace(id: Int, page: Int): Flow<ResourceWrapper<ResponseWrapper<ResponseReviewsPlace>>> {
-        return flow {
+    suspend fun fetchReviewPlace(id: Int, page: Int): Flow<ResourceWrapper<ResponseWrapper<ResponseReviewsPlace>>> =
+         flow {
             services.callReviewPlace(
                 id = id,
                 page = page,
@@ -104,10 +99,9 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                 }
             }
         }.flowOn(Dispatchers.IO)
-    }
 
-    suspend fun addReview(id: Int, request: RequestAddReview): Flow<ResourceWrapper<ResponseWrapper<Any?>>> {
-        return flow {
+    suspend fun addReview(id: Int, request: RequestAddReview): Flow<ResourceWrapper<ResponseWrapper<Any?>>> =
+         flow {
             services.createReview(
                 id = id,
                 formRequest = request
@@ -119,6 +113,5 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
                 }
             }
         }.flowOn(Dispatchers.IO)
-    }
 
 }

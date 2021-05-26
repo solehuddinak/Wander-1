@@ -10,6 +10,7 @@ import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import dev.dizzy1021.core.utils.IdlingResourceUtil
 import dev.dizzy1021.core.utils.SPLASH_SCREEN_DELAY
 import dev.dizzy1021.core.utils.SharedPreferenceUtil
 import dev.dizzy1021.wander.R
@@ -53,12 +54,18 @@ class SplashFragment : Fragment() {
 
     private fun loadSplashScreen(status: Boolean) {
 
+        IdlingResourceUtil.increment()
+
         Handler(Looper.getMainLooper()).postDelayed({
             context?.let {
                 if (status)
                     findNavController().navigate(R.id.action_splashFragment_to_homeFragment)
                 else
                     findNavController().navigate(R.id.action_splashFragment_to_onboardFragment)
+            }
+
+            if (!IdlingResourceUtil.getEspressoIdlingResource().isIdleNow) {
+                IdlingResourceUtil.decrement()
             }
 
         }, SPLASH_SCREEN_DELAY)

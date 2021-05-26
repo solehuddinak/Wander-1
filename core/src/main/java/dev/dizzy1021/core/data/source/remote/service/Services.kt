@@ -13,7 +13,7 @@ interface Services {
         @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("page") page: Int,
         @Query("user") user: String,
-    ): Response<ResponseWrapper<ResponseHome>>
+    ): Response<ResponseWrapper<List<ResponseHome>>>
 
     @GET("wishlist")
     suspend fun callWishlist(
