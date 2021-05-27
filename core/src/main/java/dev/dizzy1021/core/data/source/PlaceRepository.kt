@@ -13,6 +13,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.InputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -52,10 +56,52 @@ class PlaceRepository @Inject constructor(
         page: Int,
         user: String,
         q: String?,
-        image: Any?
-    ): Flow<ResourceWrapper<List<Place>>> {
-        TODO("Not yet implemented")
-    }
+        image: InputStream?
+    ): Flow<ResourceWrapper<List<Place>>> =
+        flow{
+            IdlingResourceUtil.increment()
+            emit(ResourceWrapper.pending(null))
+
+            var imagePart: MultipartBody.Part? = null
+
+            val stringBuilder = StringBuilder()
+            val timeStamp = (System.currentTimeMillis()/1000).toString()
+
+            imagePart = if (image != null) {
+                MultipartBody.Part.createFormData(
+                    "image",
+                    stringBuilder.append("IMG_").append(timeStamp).toString(),
+                    image.readBytes()
+                        .toRequestBody(
+                            "image/*".toMediaTypeOrNull()
+                        )
+                )
+            } else {
+                null
+            }
+
+            val response = if (imagePart != null) {
+                remoteDataSource.findPlaces(page = page, user = user, q = q, image = imagePart)
+                    .first()
+            } else {
+                remoteDataSource.findPlaces(page = page, user = user, q = q)
+                    .first()
+            }
+
+            when(response.state) {
+                ResourceState.SUCCESS -> {
+                    val result = response.data?.data.let {
+                        it?.toPlace()
+                    }
+                    emit(ResourceWrapper.success(result))
+                }
+                ResourceState.FAILURE -> {
+                    emit(ResourceWrapper.failure(response.message.toString(), null))
+                }
+            }
+            IdlingResourceUtil.decrement()
+
+        }.flowOn(Dispatchers.IO)
 
     override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> =
         flow{

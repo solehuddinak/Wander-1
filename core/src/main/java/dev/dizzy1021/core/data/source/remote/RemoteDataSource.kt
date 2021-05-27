@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -56,13 +57,28 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             }
         }.flowOn(Dispatchers.IO)
 
-    suspend fun findPlaces(page: Int, user: String, q: String?, image: Any?): Flow<ResourceWrapper<ResponseWrapper<ResponseSearch>>> =
+    suspend fun findPlaces(page: Int, user: String, q: String?, image: MultipartBody.Part?): Flow<ResourceWrapper<ResponseWrapper<List<ResponseHome>>>> =
          flow {
             services.searchPlaces(
                 page = page,
                 user = user,
                 q = q,
                 image = image
+            ).let {
+                if (it.isSuccessful) {
+                    emit(ResourceWrapper.success(it.body()))
+                } else {
+                    emit(ResourceWrapper.failure("Failure when calling data", null))
+                }
+            }
+        }.flowOn(Dispatchers.IO)
+
+    suspend fun findPlaces(page: Int, user: String, q: String?): Flow<ResourceWrapper<ResponseWrapper<List<ResponseHome>>>> =
+        flow {
+            services.searchPlaces(
+                page = page,
+                user = user,
+                q = q,
             ).let {
                 if (it.isSuccessful) {
                     emit(ResourceWrapper.success(it.body()))

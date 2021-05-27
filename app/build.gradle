@@ -48,6 +48,7 @@ dependencies {
 
     implementation project(":core")
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'id.zelory:compressor:3.0.1'
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$dynamicFeaturesVersion"
     implementation "androidx.viewpager2:viewpager2:1.0.0"
     implementation 'com.facebook.shimmer:shimmer:0.5.0'

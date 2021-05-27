@@ -3,6 +3,7 @@ package dev.dizzy1021.core.data.source.remote.service
 import dev.dizzy1021.core.BuildConfig
 import dev.dizzy1021.core.data.source.remote.request.RequestAddReview
 import dev.dizzy1021.core.data.source.remote.response.*
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -29,14 +30,23 @@ interface Services {
         @Query("user") user: String,
     ): Response<ResponseWrapper<ResponseReviews>>
 
-    @GET("place/search")
+    @Multipart
+    @POST("search")
     suspend fun searchPlaces(
         @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("q") q: String?,
         @Query("page") page: Int,
         @Query("user") user: String,
-        @Query("image") image: Any?,
-    ): Response<ResponseWrapper<ResponseSearch>>
+        @Part image: MultipartBody.Part?,
+    ): Response<ResponseWrapper<List<ResponseHome>>>
+
+    @POST("search")
+    suspend fun searchPlaces(
+        @Query("key") key: String = BuildConfig.API_KEY_SERVER,
+        @Query("q") q: String?,
+        @Query("page") page: Int,
+        @Query("user") user: String,
+    ): Response<ResponseWrapper<List<ResponseHome>>>
 
     @GET("place/{id}")
     suspend fun callPlaceById(

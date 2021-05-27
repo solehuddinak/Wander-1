@@ -41,6 +41,18 @@ class HomeFragment : Fragment() {
         val actionBar = requireActivity().findViewById<Toolbar>(R.id.main_toolbar)
         actionBar.title = "Home"
         actionBar.isVisible = true
+
+        inflater.inflate(R.menu.home_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.search -> {
+                findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onCreateView(

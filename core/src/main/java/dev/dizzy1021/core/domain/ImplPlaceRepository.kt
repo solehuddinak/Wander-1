@@ -5,6 +5,7 @@ import dev.dizzy1021.core.domain.repository.IPlaceRepository
 import dev.dizzy1021.core.domain.usecase.PlaceUseCase
 import dev.dizzy1021.core.utils.ResourceWrapper
 import kotlinx.coroutines.flow.Flow
+import java.io.InputStream
 import javax.inject.Inject
 
 class ImplPlaceRepository @Inject constructor(
@@ -21,14 +22,10 @@ class ImplPlaceRepository @Inject constructor(
         page: Int,
         user: String,
         q: String?,
-        image: Any?
-    ): Flow<ResourceWrapper<List<Place>>> {
-        TODO("Not yet implemented")
-    }
+        image: InputStream?
+    ): Flow<ResourceWrapper<List<Place>>>  = repository.searchPlaces(page, user, q, image)
 
     override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> = repository.fetchPlace(id, user)
 
-    override fun addWishlist(id: Int, user: String, place: Place) {
-        TODO("Not yet implemented")
-    }
+    override fun addWishlist(id: Int, user: String, place: Place) = repository.addWishlist(id, user, place)
 }
