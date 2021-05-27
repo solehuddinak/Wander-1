@@ -38,7 +38,6 @@ class PlaceRepository @Inject constructor(
                     emit(ResourceWrapper.success(result))
                 }
                 ResourceState.FAILURE -> {
-                    IdlingResourceUtil.decrement()
                     emit(ResourceWrapper.failure(response.message.toString(), null))
                 }
             }
@@ -58,9 +57,27 @@ class PlaceRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> {
-        TODO("Not yet implemented")
-    }
+    override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> =
+        flow{
+            IdlingResourceUtil.increment()
+            emit(ResourceWrapper.pending(null))
+
+            val response = remoteDataSource.findPlaceByID(id = id, user = user)
+                .first()
+
+            when(response.state) {
+                ResourceState.SUCCESS -> {
+                    val result = response.data?.data.let {
+                        it?.toPlace()
+                    }
+                    emit(ResourceWrapper.success(result))
+                }
+                ResourceState.FAILURE -> {
+                    emit(ResourceWrapper.failure(response.message.toString(), null))
+                }
+            }
+            IdlingResourceUtil.decrement()
+        }.flowOn(Dispatchers.IO)
 
     override fun addWishlist(id: Int, user: String, place: Place) {
         TODO("Not yet implemented")

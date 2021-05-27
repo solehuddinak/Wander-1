@@ -72,7 +72,7 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             }
         }.flowOn(Dispatchers.IO)
 
-    suspend fun findPlaceByID(id: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponsePlace>>> =
+    suspend fun findPlaceByID(id: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseHome>>> =
          flow {
             services.callPlaceById(
                 id = id,

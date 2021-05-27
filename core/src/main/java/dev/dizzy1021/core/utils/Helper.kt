@@ -43,3 +43,18 @@ fun List<ImagePathItem>.toImagePath(): List<ImagePath> =
             desc = it.contentDescription
         )
     }
+
+fun ResponseHome.toPlace(): Place =
+    Place(
+        id = this.id,
+        name = this.name,
+        desc = this.description,
+        rating = this.rating,
+        location = this.location,
+        longitude = this.longitude,
+        latitude = this.latitude,
+        poster = this.imagePath[0].url,
+        gallery = this.imagePath.toImagePath(),
+        topReviews = this.responseReviews.toTopReviews(),
+        isFavorite = this.isFavorite
+    )

@@ -26,9 +26,7 @@ class ImplPlaceRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> {
-        TODO("Not yet implemented")
-    }
+    override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> = repository.fetchPlace(id, user)
 
     override fun addWishlist(id: Int, user: String, place: Place) {
         TODO("Not yet implemented")

@@ -14,4 +14,9 @@
     <string name="onboard_subtitle_three">Use your keywords and we will give you the best place</string>
     <string name="explore_now">Explore Now</string>
     <string name="next">Next</string>
+    <string name="place_gallery">"Place Image Gallery "</string>
+    <string name="top_reviews">Top Reviews</string>
+    <string name="see_all_reviews">See All Reviews</string>
+    <string name="give_a_review">Give a Review</string>
+    <string name="open_in_map">" • Open in map"</string>
 </resources>

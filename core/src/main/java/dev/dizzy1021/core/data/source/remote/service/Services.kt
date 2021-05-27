@@ -43,7 +43,7 @@ interface Services {
         @Path("id") id: Int,
         @Query("user") user: String,
         @Query("key") key: String = BuildConfig.API_KEY_SERVER
-    ): Response<ResponseWrapper<ResponsePlace>>
+    ): Response<ResponseWrapper<ResponseHome>>
 
     @GET("place/{id}/review")
     suspend fun callReviewPlace(

@@ -22,12 +22,13 @@ class TopReviewAdapter : RecyclerView.Adapter<TopReviewAdapter.ListViewHolder>()
     inner class ListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val binding = ItemListTopReviewBinding.bind(itemView)
 
-        fun bind(items: Review) {
+        fun bind(item: Review) {
             with(binding) {
-
+                reviewDesc.text = StringBuilder().append('"').append(item.desc).append('"')
+                reviewUser.text = item.username
             }
 
-            itemView.setOnClickListener { onItemClickCallback?.onItemClicked(items) }
+            itemView.setOnClickListener { onItemClickCallback?.onItemClicked(item) }
         }
     }
 

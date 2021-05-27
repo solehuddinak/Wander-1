@@ -7,6 +7,9 @@ const val REVIEW_TABLE = "tbl_review"
 const val BASE_URL = "https://mock-service-wander.herokuapp.com/api/v1/"
 
 const val ARGS_SECTION_NUMBER = "args_section_number"
+const val ARGS_SECTION_IMAGE = "args_section_image"
+const val ARGS_IMAGE_PATH = "args_image_path"
+const val ARGS_IMAGE_DESC = "args_image_desc"
 
 const val SPLASH_SCREEN_DELAY = 1000L
 

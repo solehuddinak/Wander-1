@@ -1,7 +1,6 @@
 package dev.dizzy1021.wander.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isGone
@@ -73,9 +72,9 @@ class HomeFragment : Fragment() {
 
         if (isNetworkAvailable(requireActivity())) {
             user?.let {
-                viewModel.places(page, it).observe(viewLifecycleOwner, { place ->
-                    if (place != null) {
-                        when (place.state) {
+                viewModel.places(page, it).observe(viewLifecycleOwner, { places ->
+                    if (places != null) {
+                        when (places.state) {
                             ResourceState.PENDING -> {
                                 binding.shimmerContainer.startShimmer()
                                 binding.shimmerContainer.isVisible = true
@@ -88,12 +87,10 @@ class HomeFragment : Fragment() {
                                 binding.networkError.isGone = true
                                 binding.rvHome.isVisible = true
 
-                                place.data?.let { list ->
+                                places.data?.let { list ->
                                     adapter.submitList(list)
                                 }
 
-                                Log.d("RESPONSE HOME", "Data Size : ${place.data?.size}")
-                                // If Data is Empty
                             }
                             ResourceState.FAILURE -> {
                                 binding.shimmerContainer.stopShimmer()
