@@ -3,7 +3,7 @@ package dev.dizzy1021.core.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,7 +12,7 @@ import dev.dizzy1021.core.adapter.event.OnItemClickCallback
 import dev.dizzy1021.core.databinding.ItemListPlaceBinding
 import dev.dizzy1021.core.domain.model.Place
 
-class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.ListViewHolder>() {
+class PlaceAdapter : PagingDataAdapter<Place, PlaceAdapter.ListViewHolder>(DiffCallback) {
 
     private var onItemClickCallback: OnItemClickCallback<Place>? = null
 
@@ -45,24 +45,19 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.ListViewHolder>() {
         )
 
     override fun onBindViewHolder(holder: PlaceAdapter.ListViewHolder, position: Int) {
-        val item = differ.currentList[position]
-        holder.bind(item)
+        val item = getItem(position)
+        item?.let { holder.bind(it) }
     }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    object DiffCallback : DiffUtil.ItemCallback<Place>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<Place>() {
         override fun areItemsTheSame(oldItem: Place, newItem: Place): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Place, newItem: Place): Boolean {
-            return oldItem.hashCode() == newItem.hashCode()
+            return oldItem == newItem
         }
-
     }
 
-    private val differ = AsyncListDiffer(this, diffCallback)
-
-    fun submitList(list: List<Place>) = differ.submitList(list)
 }

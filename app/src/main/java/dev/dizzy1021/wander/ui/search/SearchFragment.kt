@@ -22,9 +22,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import dev.dizzy1021.core.adapter.PlaceAdapter
+import dev.dizzy1021.core.adapter.PlaceLoadStateAdapter
 import dev.dizzy1021.core.adapter.event.OnItemClickCallback
 import dev.dizzy1021.core.domain.model.Place
-import dev.dizzy1021.core.utils.ResourceState
 import dev.dizzy1021.core.utils.SharedPreferenceUtil
 import dev.dizzy1021.core.utils.isNetworkAvailable
 import dev.dizzy1021.wander.BuildConfig
@@ -34,6 +34,7 @@ import id.zelory.compressor.Compressor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
@@ -57,7 +58,6 @@ class SearchFragment : Fragment() {
     private var picturePath: String? = null
     private var inputStream: InputStream? = null
     private var photoFile: File? = null
-    private var page = 1
 
     @Inject
     lateinit var pref: SharedPreferenceUtil
@@ -91,6 +91,7 @@ class SearchFragment : Fragment() {
                     lifecycleScope.launch {
                         viewModel.queryChannel.send(newText.toString())
                     }
+                    adapter.refresh()
                     return true
                 }
 
@@ -121,7 +122,12 @@ class SearchFragment : Fragment() {
             2,
             StaggeredGridLayoutManager.VERTICAL
         )
-        binding.rvSearch.adapter = adapter
+
+        binding.rvSearch.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = PlaceLoadStateAdapter { adapter.refresh() },
+            footer = PlaceLoadStateAdapter { adapter.retry() }
+        )
+
         binding.rvSearch.setHasFixedSize(true)
 
         adapter.setOnItemClickCallback(object : OnItemClickCallback<Place> {
@@ -131,7 +137,7 @@ class SearchFragment : Fragment() {
         })
 
         lifecycleScope.launch {
-            viewModel.queryChannel.send("")
+            viewModel.queryChannel.send("q")
         }
 
         observeData()
@@ -144,36 +150,16 @@ class SearchFragment : Fragment() {
         val user = pref.getUser()
 
         user?.let {
-            viewModel.places(page, it, inputStream).observe(viewLifecycleOwner, { places ->
+            lifecycleScope.launch {
+                viewModel.places(it, inputStream).collectLatest { places ->
+                    binding.networkError.isGone = true
+                    binding.rvSearch.isVisible = true
+                    binding.shimmerContainer.isGone = true
 
-                if (places != null) {
-
-                    when (places.state) {
-                        ResourceState.PENDING -> {
-                            binding.shimmerContainer.startShimmer()
-                            binding.shimmerContainer.isVisible = true
-                            binding.networkError.isGone = true
-                            binding.rvSearch.isGone = true
-                        }
-                        ResourceState.SUCCESS -> {
-                            binding.shimmerContainer.stopShimmer()
-                            binding.shimmerContainer.isGone = true
-                            binding.networkError.isGone = true
-                            binding.rvSearch.isVisible = true
-
-                            places.data?.let { list ->
-                                adapter.submitList(list)
-                            }
-                        }
-                        ResourceState.FAILURE -> {
-                            binding.shimmerContainer.stopShimmer()
-                            binding.shimmerContainer.isGone = true
-                            binding.networkError.isVisible = true
-                            binding.rvSearch.isGone = true
-                        }
-                    }
+                    adapter.submitData(places)
+                    adapter.notifyDataSetChanged()
                 }
-            })
+            }
         }
 
     }
@@ -198,16 +184,25 @@ class SearchFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
 
-                inputStream = FileInputStream(photoFile)
-                observeData()
+                lifecycleScope.launch {
+                    val compressed = photoFile?.let { compressImage(it) }
+                    if (compressed != null) {
+                        postImage(compressed)
+                    }
+                }
             }
         }
+
+    private fun postImage(file: File) {
+        inputStream = FileInputStream(file)
+        observeData()
+    }
+
     private var resultChooser =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val uri = result.data?.data
                 inputStream = uri?.let { activity?.contentResolver?.openInputStream(it) };
-
                 observeData()
             }
         }

@@ -1,5 +1,6 @@
 package dev.dizzy1021.core.domain
 
+import androidx.paging.PagingData
 import dev.dizzy1021.core.domain.model.Place
 import dev.dizzy1021.core.domain.repository.IPlaceRepository
 import dev.dizzy1021.core.domain.usecase.PlaceUseCase
@@ -12,18 +13,17 @@ class ImplPlaceRepository @Inject constructor(
     private val repository: IPlaceRepository
 ) : PlaceUseCase {
 
-    override fun fetchHome(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> = repository.fetchHome(page, user)
+    override fun fetchHome(user: String): Flow<PagingData<Place>> = repository.fetchHome(user)
 
     override fun getWishlist(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> {
         TODO("Not yet implemented")
     }
 
     override fun searchPlaces(
-        page: Int,
         user: String,
         q: String?,
         image: InputStream?
-    ): Flow<ResourceWrapper<List<Place>>>  = repository.searchPlaces(page, user, q, image)
+    ): Flow<PagingData<Place>> = repository.searchPlaces(user, q, image)
 
     override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> = repository.fetchPlace(id, user)
 

@@ -1,5 +1,8 @@
 package dev.dizzy1021.core.data.source
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import dev.dizzy1021.core.data.source.local.LocalDataSource
 import dev.dizzy1021.core.data.source.remote.RemoteDataSource
 import dev.dizzy1021.core.domain.model.Place
@@ -26,46 +29,30 @@ class PlaceRepository @Inject constructor(
     private val localDataSource: LocalDataSource
 ) : IPlaceRepository {
 
-    override fun fetchHome(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> =
-        flow{
-            IdlingResourceUtil.increment()
-            emit(ResourceWrapper.pending(null))
-
-            val response = remoteDataSource.fetchHome(page = page, user = user)
-                .first()
-
-            when(response.state) {
-                ResourceState.SUCCESS -> {
-                    val result = response.data?.data.let {
-                        it?.toPlace()
-                    }
-                    emit(ResourceWrapper.success(result))
-                }
-                ResourceState.FAILURE -> {
-                    emit(ResourceWrapper.failure(response.message.toString(), null))
-                }
-            }
-            IdlingResourceUtil.decrement()
-        }.flowOn(Dispatchers.IO)
+    override fun fetchHome(user: String): Flow<PagingData<Place>> =
+        Pager(
+            PagingConfig(pageSize = 14, enablePlaceholders = false)
+        ) {
+            remoteDataSource.fetchHome(user)
+        }.flow.flowOn(Dispatchers.IO)
 
     override fun getWishlist(page: Int, user: String): Flow<ResourceWrapper<List<Place>>> {
         TODO("Not yet implemented")
     }
 
     override fun searchPlaces(
-        page: Int,
         user: String,
         q: String?,
         image: InputStream?
-    ): Flow<ResourceWrapper<List<Place>>> =
-        flow{
-            IdlingResourceUtil.increment()
-            emit(ResourceWrapper.pending(null))
+    ): Flow<PagingData<Place>> =
+        Pager(
+            PagingConfig(pageSize = 14, enablePlaceholders = false)
+        ) {
 
-            var imagePart: MultipartBody.Part? = null
+            val imagePart: MultipartBody.Part?
 
             val stringBuilder = StringBuilder()
-            val timeStamp = (System.currentTimeMillis()/1000).toString()
+            val timeStamp = (System.currentTimeMillis() / 1000).toString()
 
             imagePart = if (image != null) {
                 MultipartBody.Part.createFormData(
@@ -81,37 +68,24 @@ class PlaceRepository @Inject constructor(
             }
 
             val response = if (imagePart != null) {
-                remoteDataSource.findPlaces(page = page, user = user, q = q, image = imagePart)
-                    .first()
+                remoteDataSource.findPlaces(user = user, q = q, image = imagePart)
             } else {
-                remoteDataSource.findPlaces(page = page, user = user, q = q)
-                    .first()
+                remoteDataSource.findPlaces(user = user, q = q)
             }
 
-            when(response.state) {
-                ResourceState.SUCCESS -> {
-                    val result = response.data?.data.let {
-                        it?.toPlace()
-                    }
-                    emit(ResourceWrapper.success(result))
-                }
-                ResourceState.FAILURE -> {
-                    emit(ResourceWrapper.failure(response.message.toString(), null))
-                }
-            }
-            IdlingResourceUtil.decrement()
+            response
 
-        }.flowOn(Dispatchers.IO)
+        }.flow.flowOn(Dispatchers.IO)
 
     override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> =
-        flow{
+        flow {
             IdlingResourceUtil.increment()
             emit(ResourceWrapper.pending(null))
 
             val response = remoteDataSource.findPlaceByID(id = id, user = user)
                 .first()
 
-            when(response.state) {
+            when (response.state) {
                 ResourceState.SUCCESS -> {
                     val result = response.data?.data.let {
                         it?.toPlace()
@@ -129,3 +103,46 @@ class PlaceRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 }
+
+
+//IdlingResourceUtil.increment()
+//emit(ResourceWrapper.pending(null))
+//
+//var imagePart: MultipartBody.Part? = null
+//
+//val stringBuilder = StringBuilder()
+//val timeStamp = (System.currentTimeMillis()/1000).toString()
+//
+//imagePart = if (image != null) {
+//    MultipartBody.Part.createFormData(
+//        "image",
+//        stringBuilder.append("IMG_").append(timeStamp).toString(),
+//        image.readBytes()
+//            .toRequestBody(
+//                "image/*".toMediaTypeOrNull()
+//            )
+//    )
+//} else {
+//    null
+//}
+//
+//val response = if (imagePart != null) {
+//    remoteDataSource.findPlaces(page = page, user = user, q = q, image = imagePart)
+//        .first()
+//} else {
+//    remoteDataSource.findPlaces(page = page, user = user, q = q)
+//        .first()
+//}
+//
+//when(response.state) {
+//    ResourceState.SUCCESS -> {
+//        val result = response.data?.data.let {
+//            it?.toPlace()
+//        }
+//        emit(ResourceWrapper.success(result))
+//    }
+//    ResourceState.FAILURE -> {
+//        emit(ResourceWrapper.failure(response.message.toString(), null))
+//    }
+//}
+//IdlingResourceUtil.decrement()
