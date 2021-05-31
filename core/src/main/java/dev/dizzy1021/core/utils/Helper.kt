@@ -19,12 +19,12 @@ fun List<ResponseHome>.toPlace(): List<Place> =
             latitude = it.latitude,
             poster = it.imagePath[0].url,
             gallery = it.imagePath.toImagePath(),
-            topReviews = it.responseReviews.toTopReviews(),
+            topReviews = it.responseReviews.toReViews(),
             isFavorite = it.isFavorite
         )
     }
 
-fun List<ResponseReviews>.toTopReviews(): List<Review> =
+fun List<ResponseReviews>.toReViews(): List<Review> =
     this.map {
         Review(
             id = it.id,
@@ -55,6 +55,6 @@ fun ResponseHome.toPlace(): Place =
         latitude = this.latitude,
         poster = this.imagePath[0].url,
         gallery = this.imagePath.toImagePath(),
-        topReviews = this.responseReviews.toTopReviews(),
+        topReviews = this.responseReviews.toReViews(),
         isFavorite = this.isFavorite
     )

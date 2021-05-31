@@ -17,7 +17,7 @@
             android:id="@+id/poster_place"
             android:layout_width="150dp"
             android:layout_height="200dp"
-            android:src="@color/gray"
+            android:src="#C4C4C4"
             android:contentDescription="@string/poster"
             android:scaleType="centerCrop" />
 
@@ -32,7 +32,7 @@
             android:id="@+id/place_name"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:background="@color/gray"
+            android:background="#C4C4C4"
             android:padding="8dp"
             android:layout_marginStart="10dp"
             android:textColor="?attr/colorOnPrimary"

@@ -2,7 +2,10 @@ package dev.dizzy1021.core.data.source.remote.service
 
 import dev.dizzy1021.core.BuildConfig
 import dev.dizzy1021.core.data.source.remote.request.RequestAddReview
-import dev.dizzy1021.core.data.source.remote.response.*
+import dev.dizzy1021.core.data.source.remote.response.ResponseHome
+import dev.dizzy1021.core.data.source.remote.response.ResponseReviews
+import dev.dizzy1021.core.data.source.remote.response.ResponseWishlist
+import dev.dizzy1021.core.data.source.remote.response.ResponseWrapper
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
@@ -60,7 +63,7 @@ interface Services {
         @Path("id") id: Int,
         @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("page") page: Int,
-    ): Response<ResponseWrapper<ResponseReviewsPlace>>
+    ): Response<ResponseWrapper<List<ResponseReviews>>>
 
     @POST("place/{id}/review")
     suspend fun createReview(

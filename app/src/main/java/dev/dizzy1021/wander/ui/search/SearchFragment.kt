@@ -137,7 +137,7 @@ class SearchFragment : Fragment() {
         })
 
         lifecycleScope.launch {
-            viewModel.queryChannel.send("q")
+            viewModel.queryChannel.send("test")
         }
 
         observeData()

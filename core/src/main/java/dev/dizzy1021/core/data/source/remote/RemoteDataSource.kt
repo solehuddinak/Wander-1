@@ -3,11 +3,16 @@ package dev.dizzy1021.core.data.source.remote
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import dev.dizzy1021.core.data.source.remote.request.RequestAddReview
-import dev.dizzy1021.core.data.source.remote.response.*
+import dev.dizzy1021.core.data.source.remote.response.ResponseHome
+import dev.dizzy1021.core.data.source.remote.response.ResponseReviews
+import dev.dizzy1021.core.data.source.remote.response.ResponseWishlist
+import dev.dizzy1021.core.data.source.remote.response.ResponseWrapper
 import dev.dizzy1021.core.data.source.remote.service.Services
 import dev.dizzy1021.core.domain.model.Place
+import dev.dizzy1021.core.domain.model.Review
 import dev.dizzy1021.core.utils.ResourceWrapper
 import dev.dizzy1021.core.utils.toPlace
+import dev.dizzy1021.core.utils.toReViews
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -172,19 +177,41 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             }
         }.flowOn(Dispatchers.IO)
 
-    suspend fun fetchReviewPlace(id: Int, page: Int): Flow<ResourceWrapper<ResponseWrapper<ResponseReviewsPlace>>> =
-         flow {
-            services.callReviewPlace(
-                id = id,
-                page = page,
-            ).let {
-                if (it.isSuccessful) {
-                    emit(ResourceWrapper.success(it.body()))
-                } else {
-                    emit(ResourceWrapper.failure("Failure when calling data", null))
+    fun fetchReviewPlace(id: Int): PagingSource<Int, Review> =
+        object : PagingSource<Int, Review>() {
+
+            override fun getRefreshKey(state: PagingState<Int, Review>): Int? {
+                return state.anchorPosition
+            }
+
+            override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Review> {
+                try {
+                    val currentLoadingPageKey = params.key ?: 1
+                    val response = services.callReviewPlace(
+                        page = currentLoadingPageKey,
+                        id = id
+                    )
+
+                    val responseData = mutableListOf<Review>()
+                    val data = response.body()?.data.let {
+                        it?.toReViews()
+                    } ?: emptyList()
+
+                    responseData.addAll(data)
+
+                    val prevKey = if (currentLoadingPageKey == 1) null else currentLoadingPageKey - 1
+
+                    return LoadResult.Page(
+                        data = responseData,
+                        prevKey = prevKey,
+                        nextKey = currentLoadingPageKey.plus(1)
+                    )
+
+                } catch (e: Exception) {
+                    return LoadResult.Error(e)
                 }
             }
-        }.flowOn(Dispatchers.IO)
+        }
 
     suspend fun addReview(id: Int, request: RequestAddReview): Flow<ResourceWrapper<ResponseWrapper<Any?>>> =
          flow {

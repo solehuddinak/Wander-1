@@ -9,6 +9,7 @@ import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
@@ -176,6 +177,26 @@ class PlaceFragment : Fragment() {
             startActivity(mapIntent)
         }
 
+        binding.buttonGiveReview.setOnClickListener {
+            navigateToAddReview(idPlace)
+        }
+
+        binding.buttonAllReview.setOnClickListener {
+            navigateToReview(idPlace)
+        }
+
+    }
+
+    private fun navigateToReview(id: Int) {
+        val toReview =
+            PlaceFragmentDirections.actionPlaceFragmentToPlaceReviewFragment(id)
+        findNavController().navigate(toReview)
+    }
+
+    private fun navigateToAddReview(id: Int) {
+        val toAddReview =
+            PlaceFragmentDirections.actionPlaceFragmentToCreateFeedbackFragment(id)
+        findNavController().navigate(toAddReview)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

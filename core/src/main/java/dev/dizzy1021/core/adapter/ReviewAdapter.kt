@@ -3,7 +3,7 @@ package dev.dizzy1021.core.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import dev.dizzy1021.core.R
@@ -11,7 +11,7 @@ import dev.dizzy1021.core.adapter.event.OnItemClickCallback
 import dev.dizzy1021.core.databinding.ItemListReviewBinding
 import dev.dizzy1021.core.domain.model.Review
 
-class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ListViewHolder>() {
+class ReviewAdapter : PagingDataAdapter<Review, ReviewAdapter.ListViewHolder>(DiffCallback) {
 
     private var onItemClickCallback: OnItemClickCallback<Review>? = null
 
@@ -24,7 +24,10 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ListViewHolder>() {
 
         fun bind(items: Review) {
             with(binding) {
-
+                reviewDate.text = items.date
+                reviewDesc.text = items.desc
+                reviewUser.text = StringBuilder()
+                    .append(items.rating).append(" • ").append(items.username)
             }
 
             itemView.setOnClickListener { onItemClickCallback?.onItemClicked(items) }
@@ -37,24 +40,18 @@ class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.ListViewHolder>() {
         )
 
     override fun onBindViewHolder(holder: ReviewAdapter.ListViewHolder, position: Int) {
-        val item = differ.currentList[position]
-        holder.bind(item)
+        val item = getItem(position)
+        item?.let { holder.bind(it) }
     }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    object DiffCallback : DiffUtil.ItemCallback<Review>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<Review>() {
         override fun areItemsTheSame(oldItem: Review, newItem: Review): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Review, newItem: Review): Boolean {
-            return oldItem.hashCode() == newItem.hashCode()
+            return oldItem == newItem
         }
-
     }
-
-    private val differ = AsyncListDiffer(this, diffCallback)
-
-    fun submitList(list: List<Review>) = differ.submitList(list)
 }

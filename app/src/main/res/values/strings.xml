@@ -22,4 +22,9 @@
     <string name="back_button">back</string>
     <string name="search_places">search places</string>
     <string name="not_found">Not Found</string>
+    <string name="rating">rating</string>
+    <string name="title_review">What makes you memorable?</string>
+    <string name="hint_review">Tell your experience about this place</string>
+    <string name="add_image">Add Image</string>
+    <string name="submit">Submit</string>
 </resources>

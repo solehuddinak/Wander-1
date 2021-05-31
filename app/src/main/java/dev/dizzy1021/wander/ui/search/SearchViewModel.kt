@@ -27,7 +27,7 @@ class SearchViewModel @Inject constructor(
             .debounce(700)
             .distinctUntilChanged()
             .filter {
-                it.trim().isNotEmpty()
+                return@filter it.trim().length >= 3
             }
             .flatMapLatest {
                 useCase.searchPlaces(user, it, image)

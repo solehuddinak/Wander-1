@@ -8,18 +8,18 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import dev.dizzy1021.core.R
-import dev.dizzy1021.core.databinding.LayoutPlaceNetworkStateBinding
+import dev.dizzy1021.core.databinding.LayoutReviewNetworkStateBinding
 
-class PlaceLoadStateAdapter(
+class ReviewLoadStateAdapter(
     private val retry: () -> Unit
-) : LoadStateAdapter<PlaceLoadStateAdapter.LoadStateViewHolder>()
+) : LoadStateAdapter<ReviewLoadStateAdapter.LoadStateViewHolder>()
 {
 
     override fun onBindViewHolder(
         holder: LoadStateViewHolder,
         loadState: LoadState
     ) {
-       holder.bind(loadState)
+        holder.bind(loadState)
     }
 
     override fun onCreateViewHolder(
@@ -27,11 +27,11 @@ class PlaceLoadStateAdapter(
         loadState: LoadState
     ): LoadStateViewHolder = LoadStateViewHolder(
         LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_place_network_state, parent, false)
+            .inflate(R.layout.layout_review_network_state, parent, false)
     )
 
     inner class LoadStateViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val binding = LayoutPlaceNetworkStateBinding.bind(view)
+        private val binding = LayoutReviewNetworkStateBinding.bind(view)
 
         fun bind(loadState: LoadState) {
             binding.btnRetry.isVisible = loadState !is LoadState.Loading
