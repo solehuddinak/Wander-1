@@ -6,6 +6,7 @@ import dev.dizzy1021.core.domain.repository.IReviewRepository
 import dev.dizzy1021.core.domain.usecase.ReviewUseCase
 import dev.dizzy1021.core.utils.ResourceWrapper
 import kotlinx.coroutines.flow.Flow
+import java.io.InputStream
 import javax.inject.Inject
 
 class ImplReviewRepository @Inject constructor(
@@ -17,7 +18,12 @@ class ImplReviewRepository @Inject constructor(
 
     override fun fetchReviewPlace(id: Int): Flow<PagingData<Review>> = repository.fetchReviewPlace(id)
 
-    override fun addReview(id: Int, request: Review) {
-        TODO("Not yet implemented")
-    }
+    override fun addReview(id: Int, images: List<InputStream?>, user: String, desc: String, rating: Int) =
+        repository.addReview(
+        id,
+        images,
+        user,
+        desc,
+        rating
+    )
 }

@@ -2,7 +2,6 @@ package dev.dizzy1021.core.data.source.remote
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import dev.dizzy1021.core.data.source.remote.request.RequestAddReview
 import dev.dizzy1021.core.data.source.remote.response.ResponseHome
 import dev.dizzy1021.core.data.source.remote.response.ResponseReviews
 import dev.dizzy1021.core.data.source.remote.response.ResponseWishlist
@@ -18,6 +17,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -213,18 +213,26 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             }
         }
 
-    suspend fun addReview(id: Int, request: RequestAddReview): Flow<ResourceWrapper<ResponseWrapper<Any?>>> =
-         flow {
-            services.createReview(
-                id = id,
-                formRequest = request
-            ).let {
-                if (it.isSuccessful) {
-                    emit(ResourceWrapper.success(it.body()))
-                } else {
-                    emit(ResourceWrapper.failure("Failure when calling data", null))
-                }
+    suspend fun addReview(
+        id: Int,
+        images: List<MultipartBody.Part?>,
+        user: RequestBody,
+        desc: RequestBody,
+        rating: RequestBody,
+    ) = flow {
+        services.createReview(
+            id = id,
+            images = images,
+            user = user,
+            desc = desc,
+            rating = rating
+        ).let {
+            if (it.isSuccessful) {
+                emit(ResourceWrapper.success(it.body()))
+            } else {
+                emit(ResourceWrapper.failure("Failure when calling data", null))
             }
-        }.flowOn(Dispatchers.IO)
+        }
+    }.flowOn(Dispatchers.IO)
 
 }

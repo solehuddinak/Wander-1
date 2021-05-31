@@ -27,4 +27,9 @@
     <string name="hint_review">Tell your experience about this place</string>
     <string name="add_image">Add Image</string>
     <string name="submit">Submit</string>
+    <string name="disappointed">Disappointed</string>
+    <string name="dont_like">Do not like it much</string>
+    <string name="not_bad">Not bad</string>
+    <string name="like_it">Like it!</string>
+    <string name="best_place">Best Place!</string>
 </resources>
