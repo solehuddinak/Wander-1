@@ -1,5 +1,9 @@
 package dev.dizzy1021.core.utils
 
+import androidx.paging.LoadStateAdapter
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.RecyclerView
 import dev.dizzy1021.core.data.source.remote.response.ImagePathItem
 import dev.dizzy1021.core.data.source.remote.response.ResponseHome
 import dev.dizzy1021.core.data.source.remote.response.ResponseReviews
@@ -58,3 +62,15 @@ fun ResponseHome.toPlace(): Place =
         topReviews = this.responseReviews.toReViews(),
         isFavorite = this.isFavorite
     )
+
+fun <T : Any, V : RecyclerView.ViewHolder> PagingDataAdapter<T, V>.withLoadStateAdapters(
+    header: LoadStateAdapter<*>,
+    footer: LoadStateAdapter<*>
+): ConcatAdapter {
+    addLoadStateListener { loadStates ->
+        header.loadState = loadStates.refresh
+        footer.loadState = loadStates.append
+    }
+
+    return ConcatAdapter(header, this, footer)
+}

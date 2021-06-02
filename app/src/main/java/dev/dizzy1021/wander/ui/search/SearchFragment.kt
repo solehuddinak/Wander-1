@@ -27,6 +27,7 @@ import dev.dizzy1021.core.adapter.event.OnItemClickCallback
 import dev.dizzy1021.core.domain.model.Place
 import dev.dizzy1021.core.utils.SharedPreferenceUtil
 import dev.dizzy1021.core.utils.isNetworkAvailable
+import dev.dizzy1021.core.utils.withLoadStateAdapters
 import dev.dizzy1021.wander.BuildConfig
 import dev.dizzy1021.wander.R
 import dev.dizzy1021.wander.databinding.FragmentSearchBinding
@@ -98,8 +99,6 @@ class SearchFragment : Fragment() {
             })
 
         } else {
-            binding.shimmerContainer.stopShimmer()
-            binding.shimmerContainer.isGone = true
             binding.networkError.isVisible = true
             binding.rvSearch.isGone = true
         }
@@ -123,7 +122,7 @@ class SearchFragment : Fragment() {
             StaggeredGridLayoutManager.VERTICAL
         )
 
-        binding.rvSearch.adapter = adapter.withLoadStateHeaderAndFooter(
+        binding.rvSearch.adapter = adapter.withLoadStateAdapters(
             header = PlaceLoadStateAdapter { adapter.refresh() },
             footer = PlaceLoadStateAdapter { adapter.retry() }
         )
@@ -154,7 +153,6 @@ class SearchFragment : Fragment() {
                 viewModel.places(it, inputStream).collectLatest { places ->
                     binding.networkError.isGone = true
                     binding.rvSearch.isVisible = true
-                    binding.shimmerContainer.isGone = true
 
                     adapter.submitData(places)
                     adapter.notifyDataSetChanged()

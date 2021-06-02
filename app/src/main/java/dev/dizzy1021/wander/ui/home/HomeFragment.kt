@@ -17,6 +17,7 @@ import dev.dizzy1021.core.adapter.event.OnItemClickCallback
 import dev.dizzy1021.core.domain.model.Place
 import dev.dizzy1021.core.utils.SharedPreferenceUtil
 import dev.dizzy1021.core.utils.isNetworkAvailable
+import dev.dizzy1021.core.utils.withLoadStateAdapters
 import dev.dizzy1021.wander.R
 import dev.dizzy1021.wander.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -71,13 +72,13 @@ class HomeFragment : Fragment() {
 
         val adapter = PlaceAdapter()
 
-        binding.rvHome.layoutManager =
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-
-        binding.rvHome.adapter = adapter.withLoadStateHeaderAndFooter(
+        binding.rvHome.adapter = adapter.withLoadStateAdapters(
             header = PlaceLoadStateAdapter { adapter.refresh() },
             footer = PlaceLoadStateAdapter { adapter.retry() }
         )
+
+        binding.rvHome.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         binding.rvHome.setHasFixedSize(true)
 
@@ -95,14 +96,12 @@ class HomeFragment : Fragment() {
                     viewModel.places(it).collectLatest { places ->
                         binding.networkError.isGone = true
                         binding.rvHome.isVisible = true
-                        binding.shimmerContainer.isGone = true
                         adapter.submitData(places)
                     }
                 }
             }
 
         } else {
-            binding.shimmerContainer.isGone = true
             binding.networkError.isVisible = true
             binding.rvHome.isGone = true
         }
