@@ -10,5 +10,5 @@ data class Review(
     val rating: Double,
     val desc: String,
     val date: String,
-    val placeId: Int,
+    val placeId: String,
 ): Parcelable

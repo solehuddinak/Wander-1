@@ -14,12 +14,12 @@ class FeedbackViewModel @Inject constructor(
     private val useCase: ReviewUseCase
 ): ViewModel() {
 
-    val reviews = { id: Int ->
+    val reviews = { id: String ->
         useCase.fetchReviewPlace(id).cachedIn(viewModelScope)
     }
 
     val addReview = {
-            id: Int,
+            id: String,
             images: List<InputStream?>,
             user: String,
             desc: String,

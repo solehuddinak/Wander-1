@@ -11,7 +11,7 @@ class PlaceViewModel @Inject constructor(
     private val useCase: PlaceUseCase
 ): ViewModel() {
 
-    val places = { id: Int, user: String ->
+    val places = { id: String, user: String ->
         useCase.fetchPlace(id, user).asLiveData()
     }
 

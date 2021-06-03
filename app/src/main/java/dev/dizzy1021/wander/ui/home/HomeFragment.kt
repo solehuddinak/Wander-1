@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun navigateToDetailPlace(id: Int) {
+    private fun navigateToDetailPlace(id: String) {
         val toDetail =
             HomeFragmentDirections.actionHomeFragmentToPlaceFragment(id)
         findNavController().navigate(toDetail)

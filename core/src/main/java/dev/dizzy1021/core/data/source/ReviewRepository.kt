@@ -31,7 +31,7 @@ class ReviewRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun fetchReviewPlace(id: Int): Flow<PagingData<Review>> =
+    override fun fetchReviewPlace(id: String): Flow<PagingData<Review>> =
         Pager(
             PagingConfig(pageSize = 14, enablePlaceholders = false)
         ) {
@@ -40,7 +40,7 @@ class ReviewRepository @Inject constructor(
         }.flow.flowOn(Dispatchers.IO)
 
     override fun addReview(
-        id: Int,
+        id: String,
         images: List<InputStream?>,
         user: String,
         desc: String,

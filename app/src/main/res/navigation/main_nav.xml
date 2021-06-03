@@ -42,13 +42,16 @@
         tools:layout="@layout/fragment_place" >
         <argument
             android:name="id"
-            app:argType="integer" />
+            app:argType="string" />
         <action
             android:id="@+id/action_placeFragment_to_createFeedbackFragment"
             app:destination="@id/createFeedbackFragment" />
         <action
             android:id="@+id/action_placeFragment_to_placeReviewFragment"
             app:destination="@id/placeReviewFragment" />
+        <action
+            android:id="@+id/action_placeFragment_to_googleReviewFragment"
+            app:destination="@id/googleReviewFragment" />
     </fragment>
     <fragment
         android:id="@+id/reviewFragment"
@@ -102,7 +105,7 @@
         tools:layout="@layout/fragment_create_feedback" >
         <argument
             android:name="id"
-            app:argType="integer" />
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/placeReviewFragment"
@@ -111,6 +114,15 @@
         tools:layout="@layout/fragment_place_review" >
         <argument
             android:name="id"
-            app:argType="integer" />
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/googleReviewFragment"
+        android:name="dev.dizzy1021.wander.ui.place.feedback.GoogleReviewFragment"
+        android:label="fragment_google_review"
+        tools:layout="@layout/fragment_google_review" >
+        <argument
+            android:name="id"
+            app:argType="string" />
     </fragment>
 </navigation>
