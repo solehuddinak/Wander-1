@@ -14,7 +14,7 @@ interface PlaceUseCase {
 
     fun searchPlaces(user: String, q: String?, image: InputStream?): Flow<PagingData<Place>>
 
-    fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>>
+    fun fetchPlace(id: String, user: String): Flow<ResourceWrapper<Place>>
 
     fun addWishlist(id: Int, user: String, place: Place)
 }

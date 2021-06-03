@@ -163,7 +163,7 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             }
         }
 
-     fun findPlaceByID(id: Int, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseHome>>> =
+     fun findPlaceByID(id: String, user: String): Flow<ResourceWrapper<ResponseWrapper<ResponseHome>>> =
          flow {
             services.callPlaceById(
                 id = id,
@@ -177,7 +177,7 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
             }
         }.flowOn(Dispatchers.IO)
 
-    fun fetchReviewPlace(id: Int): PagingSource<Int, Review> =
+    fun fetchReviewPlace(id: String): PagingSource<Int, Review> =
         object : PagingSource<Int, Review>() {
 
             override fun getRefreshKey(state: PagingState<Int, Review>): Int? {
@@ -214,7 +214,7 @@ class RemoteDataSource @Inject constructor(private val services: Services) {
         }
 
     suspend fun addReview(
-        id: Int,
+        id: String,
         images: List<MultipartBody.Part?>,
         user: RequestBody,
         desc: RequestBody,

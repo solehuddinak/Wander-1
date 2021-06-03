@@ -187,13 +187,13 @@ class PlaceFragment : Fragment() {
 
     }
 
-    private fun navigateToReview(id: Int) {
+    private fun navigateToReview(id: String) {
         val toReview =
-            PlaceFragmentDirections.actionPlaceFragmentToPlaceReviewFragment(id)
+            PlaceFragmentDirections.actionPlaceFragmentToGoogleReviewFragment(id)
         findNavController().navigate(toReview)
     }
 
-    private fun navigateToAddReview(id: Int) {
+    private fun navigateToAddReview(id: String) {
         val toAddReview =
             PlaceFragmentDirections.actionPlaceFragmentToCreateFeedbackFragment(id)
         findNavController().navigate(toAddReview)

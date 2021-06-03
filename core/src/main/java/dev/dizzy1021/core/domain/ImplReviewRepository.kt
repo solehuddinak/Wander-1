@@ -16,9 +16,9 @@ class ImplReviewRepository @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override fun fetchReviewPlace(id: Int): Flow<PagingData<Review>> = repository.fetchReviewPlace(id)
+    override fun fetchReviewPlace(id: String): Flow<PagingData<Review>> = repository.fetchReviewPlace(id)
 
-    override fun addReview(id: Int, images: List<InputStream?>, user: String, desc: String, rating: Int) =
+    override fun addReview(id: String, images: List<InputStream?>, user: String, desc: String, rating: Int) =
         repository.addReview(
         id,
         images,

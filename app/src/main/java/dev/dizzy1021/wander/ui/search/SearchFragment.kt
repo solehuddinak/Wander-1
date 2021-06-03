@@ -305,7 +305,7 @@ class SearchFragment : Fragment() {
         resultChooser.launch(chooser)
     }
 
-    private fun navigateToDetailPlace(id: Int) {
+    private fun navigateToDetailPlace(id: String) {
         val toDetail =
             SearchFragmentDirections.actionSearchFragmentToPlaceFragment(id)
         findNavController().navigate(toDetail)
