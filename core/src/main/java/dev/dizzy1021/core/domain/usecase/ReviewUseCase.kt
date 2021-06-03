@@ -10,8 +10,8 @@ interface ReviewUseCase {
 
     fun getReviews(page: Int, user: String): Flow<ResourceWrapper<List<Review>>>
 
-    fun fetchReviewPlace(id: Int): Flow<PagingData<Review>>
+    fun fetchReviewPlace(id: String): Flow<PagingData<Review>>
 
-    fun addReview(id: Int, images: List<InputStream?>, user: String, desc: String, rating: Int): Flow<ResourceWrapper<String?>>
+    fun addReview(id: String, images: List<InputStream?>, user: String, desc: String, rating: Int): Flow<ResourceWrapper<String?>>
 
 }

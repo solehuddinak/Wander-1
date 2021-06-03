@@ -44,7 +44,7 @@ data class ResponseHome(
 	val location: String,
 
 	@field:SerializedName("id")
-	val id: Int
+	val id: String
 ) : Parcelable
 
 @Parcelize

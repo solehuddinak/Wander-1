@@ -16,7 +16,6 @@ import dev.dizzy1021.core.utils.ResourceState
 import dev.dizzy1021.core.utils.SharedPreferenceUtil
 import dev.dizzy1021.wander.R
 import dev.dizzy1021.wander.databinding.FragmentCreateFeedbackBinding
-import dev.dizzy1021.wander.ui.place.PlaceFragmentArgs
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -63,7 +62,7 @@ class CreateFeedbackFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val idPlace = PlaceFragmentArgs.fromBundle(arguments as Bundle).id
+        val idPlace = CreateFeedbackFragmentArgs.fromBundle(arguments as Bundle).id
         val user = pref.getUser()
 
         binding.buttonAddReview.setOnClickListener {

@@ -59,7 +59,7 @@ class PlaceReviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = ReviewAdapter()
-        val idPlace = PlaceFragmentArgs.fromBundle(arguments as Bundle).id
+        val idPlace = PlaceReviewFragmentArgs.fromBundle(arguments as Bundle).id
 
         binding.rvReview.layoutManager =
             LinearLayoutManager(context)

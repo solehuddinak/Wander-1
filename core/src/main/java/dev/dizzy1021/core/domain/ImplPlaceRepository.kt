@@ -25,7 +25,7 @@ class ImplPlaceRepository @Inject constructor(
         image: InputStream?
     ): Flow<PagingData<Place>> = repository.searchPlaces(user, q, image)
 
-    override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> = repository.fetchPlace(id, user)
+    override fun fetchPlace(id: String, user: String): Flow<ResourceWrapper<Place>> = repository.fetchPlace(id, user)
 
     override fun addWishlist(id: Int, user: String, place: Place) = repository.addWishlist(id, user, place)
 }

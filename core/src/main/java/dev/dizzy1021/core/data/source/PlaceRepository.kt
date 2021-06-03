@@ -77,7 +77,7 @@ class PlaceRepository @Inject constructor(
 
         }.flow.flowOn(Dispatchers.IO)
 
-    override fun fetchPlace(id: Int, user: String): Flow<ResourceWrapper<Place>> =
+    override fun fetchPlace(id: String, user: String): Flow<ResourceWrapper<Place>> =
         flow {
             IdlingResourceUtil.increment()
             emit(ResourceWrapper.pending(null))

@@ -53,14 +53,14 @@ interface Services {
 
     @GET("place/{id}")
     suspend fun callPlaceById(
-        @Path("id") id: Int,
+        @Path("id") id: String,
         @Query("user") user: String,
         @Query("key") key: String = BuildConfig.API_KEY_SERVER
     ): Response<ResponseWrapper<ResponseHome>>
 
     @GET("place/{id}/review")
     suspend fun callReviewPlace(
-        @Path("id") id: Int,
+        @Path("id") id: String,
         @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Query("page") page: Int,
     ): Response<ResponseWrapper<List<ResponseReviews>>>
@@ -68,7 +68,7 @@ interface Services {
     @Multipart
     @POST("place/{id}/review")
     suspend fun createReview(
-        @Path("id") id: Int,
+        @Path("id") id: String,
         @Query("key") key: String = BuildConfig.API_KEY_SERVER,
         @Part images: List<MultipartBody.Part?>,
         @Part("user") user: RequestBody,

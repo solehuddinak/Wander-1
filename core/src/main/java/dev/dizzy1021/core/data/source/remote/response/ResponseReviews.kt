@@ -23,7 +23,7 @@ data class ResponseReviews(
     val user: String,
 
     @field:SerializedName("place_id")
-    val placeId: Int,
+    val placeId: String,
 
     @field:SerializedName("username")
     val username: String,
